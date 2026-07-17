@@ -2,7 +2,7 @@ FROM php:8.0-apache
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-# 1. System packages (Added libsqlite3-dev for pdo_sqlite)
+# 1. System packages (Added libonig-dev for mbstring)
 RUN apt-get update -y && \
     apt-get install -y --no-install-recommends --fix-missing \
     ca-certificates \
@@ -10,11 +10,12 @@ RUN apt-get update -y && \
     libzip-dev \
     default-libmysqlclient-dev \
     libsqlite3-dev \
+    libonig-dev \
     unzip \
     git \
     && rm -rf /var/lib/apt/lists/*
 
-# 2. PHP Extensions (Removed redundant 'pdo' & 'curl', kept only what needs compiling)
+# 2. PHP Extensions
 RUN docker-php-ext-install -j$(nproc) \
     pdo_mysql \
     pdo_sqlite \
