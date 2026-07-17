@@ -2,20 +2,20 @@ FROM php:8.0-apache
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-# 1. System packages (isolated for better caching & error tracking)
+# 1. System packages (Added libsqlite3-dev for pdo_sqlite)
 RUN apt-get update -y && \
     apt-get install -y --no-install-recommends --fix-missing \
     ca-certificates \
     libcurl4-openssl-dev \
     libzip-dev \
+    default-libmysqlclient-dev \
+    libsqlite3-dev \
     unzip \
     git \
     && rm -rf /var/lib/apt/lists/*
 
-# 2. PHP Extensions
+# 2. PHP Extensions (Removed redundant 'pdo' & 'curl', kept only what needs compiling)
 RUN docker-php-ext-install -j$(nproc) \
-    curl \
-    pdo \
     pdo_mysql \
     pdo_sqlite \
     zip \
